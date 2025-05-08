@@ -1,1 +1,6 @@
+dist
 config.js
+node_modules
+
+# Local Netlify folder
+.netlify
