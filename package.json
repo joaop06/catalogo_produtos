@@ -5,8 +5,11 @@
   "main": "config.example.js",
   "scripts": {
     "build": "node build.js",
+    "login": "npx netlify login",
+    "logout": "npx netlify logout",
+    "status": "npx netlify status",
     "switch": "npx netlify switch",
-    "deploy": "npm run build && npx netlify deploy --prod --dir=dist"
+    "deploy": "npm run build && npx netlify deploy --prod --dir=dist && npm run logout"
   },
   "repository": {
     "type": "git",
