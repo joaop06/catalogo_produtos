@@ -1,13 +1,21 @@
-const senhaCorreta = "admin123"; // <- Altere a senha aqui
+const {
+    PASSWORD_ADMIN,
+    CLOUDINARY_NAME,
+    GOOGLE_SHEET_ID,
+    RANGE_SHEET_INFO,
+    GOOGLE_CLOUD_API_KEY,
+    CLOUDINARY_UPLOAD_PRESET,
+} = CONFIG;
 
-const cloudName = 'dqhc0gy9d';
-const uploadPreset = 'ml_default';
+const sheetInfoUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/${RANGE_SHEET_INFO}?key=${GOOGLE_CLOUD_API_KEY}`;
 
 window.onload = function () {
-    const senha = prompt("Digite a senha para acessar:");
-    if (senha !== senhaCorreta) {
-        alert("Acesso negado.");
-        window.location.href = "../index.html";
+    if (!!PASSWORD_ADMIN) {
+        const password = prompt("Digite a senha para acessar:");
+        if (password !== PASSWORD_ADMIN) {
+            alert("Acesso negado.");
+            window.location.href = "../index.html";
+        }
     }
 };
 
@@ -32,14 +40,14 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', uploadPreset);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
     if (customName) {
         const extension = file.name.split('.').pop();
         formData.append('public_id', customName + "." + extension);
     }
 
     try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, {
             method: 'POST',
             body: formData
         });
@@ -59,8 +67,13 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
 
         copyButton.onclick = () => {
             navigator.clipboard.writeText(data.secure_url).then(() => {
-                popup.style.display = 'none';
-                alert('Link copiado para a área de transferência!');
+                copyButton.innerHTML = 'Copiado! <span class="checkmark">✔️</span>';
+                copyButton.classList.add('copied');
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    copyButton.innerHTML = 'Copiar Link';
+                    copyButton.classList.remove('copied');
+                }, 1500);
             });
         };
 
@@ -73,11 +86,8 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
 });
 
 async function fetchLogo() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE_LOGO}?key=${API_KEY}`;
-    // https://sheets.googleapis.com/v4/spreadsheets/1RBJCnXHT6JUCSBHi_TQtNaSISwrGOyKoihILpQ-FSjM/values/Página2!A1?key=AIzaSyCDh0IRBzl2NL0Gc84qceyTHZXlS5M5bek
-
     try {
-        const response = await fetch(url);
+        const response = await fetch(sheetInfoUrl);
         const dataJson = await response.json();
         const companyData = dataJson.values || [];
 
@@ -85,10 +95,26 @@ async function fetchLogo() {
          * Irá trabalhar em cima de cada dado da empresa
          */
         companyData.forEach(([name, content]) => {
-            if (name === 'Logo') {
-                const container = document.getElementById('image-logo');
-                container.src = content; // Link da imagem
+            switch (name) {
+                case 'Logo':
+                    const imageLogo = document.getElementById('image-logo');
+                    imageLogo.src = content; // Link da imagem
+                    break
+
+                case 'Whatsapp':
+                    if (!!content) {
+                        const whatsappButton = document.getElementById('whatsapp-button');
+
+                        const whatsappNumber = document.getElementById('whatsapp-number');
+                        whatsappNumber.href = `https://wa.me/55${content}`; // Número do WhatsApp
+
+                        whatsappNumber.classList.remove('disabled');
+                        whatsappButton.classList.remove('disabled');
+                        whatsappButton.classList.add('whatsapp-button');
+                    }
+                    break
             }
+
         });
 
     } catch (error) {

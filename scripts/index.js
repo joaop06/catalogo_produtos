@@ -1,52 +1,14 @@
-const RANGE_LOGO = 'Página2!A1:B'; // Planilha de Informações (Logo)
-const RANGE_PRODUCTS = 'Página1!A2:C'; // Planilha de Produtos para o catálogo
+const {
+    GOOGLE_SHEET_ID,
+    RANGE_SHEET_INFO,
+    GOOGLE_CLOUD_API_KEY,
+    RANGE_SHEET_PRODUCTS,
+} = CONFIG;
 
-const API_KEY = 'AIzaSyCDh0IRBzl2NL0Gc84qceyTHZXlS5M5bek';
-const SHEET_ID = '1RBJCnXHT6JUCSBHi_TQtNaSISwrGOyKoihILpQ-FSjM';
+const sheetInfoUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/${RANGE_SHEET_INFO}?key=${GOOGLE_CLOUD_API_KEY}`;
+const sheetProductsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/${RANGE_SHEET_PRODUCTS}?key=${GOOGLE_CLOUD_API_KEY}`;
 
-async function fetchProdutos() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE_PRODUCTS}?key=${API_KEY}`;
-    // https://sheets.googleapis.com/v4/spreadsheets/1RBJCnXHT6JUCSBHi_TQtNaSISwrGOyKoihILpQ-FSjM/values/Página1!A2:C?key=AIzaSyCDh0IRBzl2NL0Gc84qceyTHZXlS5M5bek
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const products = data.values || [];
-
-        renderProdutos(products);
-    } catch (error) {
-        document.getElementById('product-grid').innerText = 'Erro ao carregar produtos';
-        console.error(error);
-    }
-}
-
-function renderProdutos(products) {
-    const container = document.getElementById('product-grid');
-    container.innerHTML = '';
-
-    /**
-     * Para cada produto retornado da API:
-     *  - Cria uma div com a classe `product-card`
-     *  - Insere a imagem do produto
-     *  - Adiciona as informações do produto
-     */
-    products.forEach(([name, price, image_link]) => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <img src="${image_link}" alt="${name}" />
-            <div class="product-info">
-                <div class="product-name">${name}</div>
-                <div class="product-price">${price}</div>
-            </div>
-        `;
-        container.appendChild(card);
-    });
-}
-/**
- * Busca os produtos para o catálogo
- */
-fetchProdutos();
 
 /**
  * Botão Flutuante do WhatsApp
@@ -66,12 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-async function fetchLogo() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE_LOGO}?key=${API_KEY}`;
-    // https://sheets.googleapis.com/v4/spreadsheets/1RBJCnXHT6JUCSBHi_TQtNaSISwrGOyKoihILpQ-FSjM/values/Página2!A1?key=AIzaSyCDh0IRBzl2NL0Gc84qceyTHZXlS5M5bek
 
+/**
+ * Busca as configurações da empresa
+ *  - Logomarca
+ *  - Número Whatsapp
+ *  - Opção de preços habilitados/desabilitados
+ */
+let ENABLE_PRICE_PRODUCTS = false;
+async function fetchCompanyConfig() {
     try {
-        const response = await fetch(url);
+        const response = await fetch(sheetInfoUrl);
         const dataJson = await response.json();
         const companyData = dataJson.values || [];
 
@@ -83,7 +50,7 @@ async function fetchLogo() {
                 case 'Logo':
                     const imageLogo = document.getElementById('image-logo');
                     imageLogo.src = content; // Link da imagem
-                    break
+                    break;
 
                 case 'Whatsapp':
                     if (!!content) {
@@ -96,13 +63,62 @@ async function fetchLogo() {
                         whatsappButton.classList.remove('disabled');
                         whatsappButton.classList.add('whatsapp-button');
                     }
-                    break
+                    break;
+
+                case 'Habilitar Preços':
+                    console.log(`Antes: ENABLE_PRICE_PRODUCTS ${ENABLE_PRICE_PRODUCTS} // content ${content}`);
+                    ENABLE_PRICE_PRODUCTS = !!content && content.toString().toLowerCase() === 'sim';
+                    console.log(`Depois: ENABLE_PRICE_PRODUCTS ${ENABLE_PRICE_PRODUCTS}`);
+                    break;
             }
 
         });
+
+        fetchProdutos();
 
     } catch (error) {
         console.error(error);
     }
 }
-fetchLogo();
+fetchCompanyConfig();
+
+
+
+/**
+ * Busca os produtos para o catálogo
+ */
+async function fetchProdutos() {
+    try {
+        const response = await fetch(sheetProductsUrl);
+        const data = await response.json();
+        const products = data.values || [];
+
+        /**
+         * Para cada produto retornado da API:
+         *  - Cria uma div com a classe `product-card`
+         *  - Insere a imagem do produto
+         *  - Adiciona as informações do produto
+        */
+        const container = document.getElementById('product-grid');
+        container.innerHTML = '';
+        products.forEach(([ref, name, price, image_link]) => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            console.log(ENABLE_PRICE_PRODUCTS, price)
+            card.innerHTML = `
+                <img src="${image_link}" alt="${name}" />
+                <div class="product-info">
+                    <div class="product-name">${name}</div>
+                    <div class="product-ref">REF.${ref?.toString()?.trim()?.padStart(4, 0)}</div>
+                    <div class="product-price">${!!ENABLE_PRICE_PRODUCTS ? !!price ? price : 'Em breve' : ''}
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        document.getElementById('product-grid').innerText = 'Erro ao carregar produtos';
+        console.error(error);
+    }
+}
