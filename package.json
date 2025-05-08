@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/joaop06/catalogo_produtos/issues"
   },
-  "homepage": "https://github.com/joaop06/catalogo_produtos#readme"
+  "homepage": "https://github.com/joaop06/catalogo_produtos#readme",
+  "devDependencies": {
+    "netlify-cli": "^21.2.0"
+  }
 }
