@@ -11,6 +11,7 @@ const ignoreList = [
     'dist',
     '.git',
     '.env',
+    '.qodo',
     '.netlify',
     'build.js',
     '.gitignore',
@@ -43,7 +44,9 @@ function copyRecursive(src, dest) {
 }
 
 // Remover o antigo build
-fs.rmdirSync(targetDir, { recursive: true })
+if (fs.existsSync(targetDir)) {
+    fs.rmdirSync(targetDir, { recursive: true })
+}
 
 // Garantir que a pasta dist existe
 fs.mkdirSync(targetDir);
