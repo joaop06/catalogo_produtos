@@ -24,30 +24,6 @@
     box-shadow: 0 0 0 3px rgba(255, 131, 70, 0.2);
 }
 
-.filter-container {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.filter-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    background: var(--color-primary);
-    color: var(--color-white);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.filter-button:hover {
-    background: var(--color-secondary);
-}
-
-.filter-button.active {
-    background: var(--color-secondary);
-}
-
 /* Modal de Visualização */
 .modal {
     display: none;
@@ -203,10 +179,6 @@
         padding: 0.8rem;
     }
 
-    .filter-container {
-        gap: 0.5rem;
-    }
-
     .filter-button {
         padding: 0.4rem 0.8rem;
         font-size: 0.9rem;
@@ -230,11 +202,6 @@
     .search-box {
         padding: 0.8rem;
         font-size: 0.9rem;
-    }
-
-    .filter-button {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.8rem;
     }
 
     .whatsapp-logo {

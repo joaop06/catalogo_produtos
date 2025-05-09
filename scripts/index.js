@@ -61,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
             modalImage.src = '';
         }
     });
+
+    // Inicializa os event listeners para busca e filtros
+    initializeEventListeners();
 });
 
 /**
@@ -70,12 +73,6 @@ function initializeEventListeners() {
     // Event listener para busca
     const searchBox = document.getElementById('searchBox');
     searchBox.addEventListener('input', handleSearch);
-
-    // Event listeners para filtros
-    const filterButtons = document.querySelectorAll('.filter-button');
-    filterButtons.forEach(button => {
-        button.addEventListener('click', handleFilter);
-    });
 
     // Event listener para modal
     const modal = document.getElementById('imageModal');
@@ -277,40 +274,12 @@ function renderPagination() {
  * Manipula a busca de produtos
  */
 function handleSearch(e) {
-    const searchTerm = e.target.value.toLowerCase();
+    const searchTerm = e.target.value.toLowerCase().trim();
     filteredProducts = allProducts.filter(([ref, name, price]) => {
-        return name.toLowerCase().includes(searchTerm) ||
-            ref.toString().toLowerCase().includes(searchTerm);
+        const refStr = ref ? ref.toString().toLowerCase() : '';
+        const nameStr = name ? name.toLowerCase() : '';
+        return nameStr.includes(searchTerm) || refStr.includes(searchTerm);
     });
-    currentPage = 1;
-    renderProducts();
-    renderPagination();
-}
-
-/**
- * Manipula os filtros de produtos
- */
-function handleFilter(e) {
-    const filter = e.target.dataset.filter;
-
-    // Atualiza botões ativos
-    document.querySelectorAll('.filter-button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    e.target.classList.add('active');
-
-    // Aplica filtro
-    switch (filter) {
-        case 'price':
-            filteredProducts = allProducts.filter(([, , price]) => !!price);
-            break;
-        case 'no-price':
-            filteredProducts = allProducts.filter(([, , price]) => !price);
-            break;
-        default:
-            filteredProducts = [...allProducts];
-    }
-
     currentPage = 1;
     renderProducts();
     renderPagination();
