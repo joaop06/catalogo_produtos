@@ -113,9 +113,10 @@ main {
 
 #product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 280px));
     gap: 2rem;
     padding: 1rem;
+    justify-content: center;
 }
 
 .product-card {
@@ -127,6 +128,8 @@ main {
     flex-direction: column;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     color: var(--color-text);
+    width: 280px;
+    max-width: 100%;
 }
 
 .product-card:hover {
@@ -238,12 +241,32 @@ footer {
 
 /* Responsividade */
 @media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+
+    .logo {
+        font-size: 1.4rem;
+        height: 50px;
+    }
+
+    .logo img {
+        max-width: 140px;
+    }
+
     .catalog-title {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
+        margin-bottom: 2rem;
+    }
+
+    .catalog-title::after {
+        width: 80px;
+        height: 3px;
+        margin: 0.8rem auto;
     }
 
     main {
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
     }
 
     #product-grid {
@@ -253,7 +276,7 @@ footer {
     }
 
     .product-card {
-        border-radius: 10px;
+        width: 100%;
     }
 
     .product-card img {
@@ -261,31 +284,150 @@ footer {
     }
 
     .product-info {
-        padding: 1rem;
+        padding: 1.2rem;
     }
 
     .product-name {
-        font-size: 1rem;
+        font-size: 1.1rem;
+        margin-bottom: 0.6rem;
     }
 
     .product-price {
-        font-size: 1.1rem;
-    }
-
-    .logo {
-        height: 50px;
-    }
-
-    .logo img {
-        max-width: 150px;
-        min-width: 80px;
+        font-size: 1.2rem;
     }
 }
 
-/* Ajuste para telas muito pequenas */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
+    header {
+        padding: 0.8rem;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+        height: 40px;
+    }
+
+    .logo img {
+        max-width: 120px;
+    }
+
+    .catalog-title {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    main {
+        padding: 1rem 0.8rem;
+    }
+
     #product-grid {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+
+    .product-card {
+        max-width: 100%;
+    }
+
+    .product-card img {
+        height: 160px;
+    }
+
+    .product-info {
+        padding: 0.8rem;
+    }
+
+    .product-name {
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .product-ref {
+        font-size: 0.75rem;
+    }
+
+    .product-price {
+        font-size: 1rem;
+    }
+
+    footer {
+        padding: 1.5rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    #whatsapp-button {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .logo img {
+        max-width: 100px;
+    }
+
+    #product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+    }
+
+    .product-card img {
+        height: 140px;
+    }
+
+    .product-info {
+        padding: 0.6rem;
+    }
+
+    .product-name {
+        font-size: 0.85rem;
+    }
+
+    .product-ref {
+        font-size: 0.7rem;
+    }
+
+    .product-price {
+        font-size: 0.9rem;
+    }
+}
+
+/* Melhorias de acessibilidade e usabilidade em dispositivos touch */
+@media (hover: none) {
+    .product-card:hover {
+        transform: none;
+    }
+
+    .product-card:hover img {
+        transform: none;
+    }
+
+    .logo img:hover {
+        transform: none;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-height: 600px) {
+    .product-card img {
+        height: 140px;
+    }
+
+    .product-info {
+        padding: 0.6rem;
+    }
+}
+
+/* Ajustes para orientação paisagem em dispositivos móveis */
+@media (max-width: 768px) and (orientation: landscape) {
+    #product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-card img {
+        height: 140px;
     }
 }
 
