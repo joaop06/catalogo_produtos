@@ -446,3 +446,52 @@ footer {
 .form-button:hover {
     background-color: #ff9a6b;
 }
+
+.search-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+}
+
+#searchBox {
+    width: 100%;
+    padding: 12px 45px 12px 20px;
+    border: 2px solid var(--color-primary);
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: var(--color-white);
+}
+
+#searchBox:focus {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(255, 131, 70, 0.2);
+}
+
+#clearSearch {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+#clearSearch:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+#clearSearch svg {
+    width: 20px;
+    height: 20px;
+}

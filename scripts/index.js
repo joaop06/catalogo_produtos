@@ -9,10 +9,15 @@ const sheetInfoUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHE
 const sheetProductsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/${RANGE_SHEET_PRODUCTS}?key=${GOOGLE_CLOUD_API_KEY}`;
 
 // Configurações de paginação
-const ITEMS_PER_PAGE = 12;
 let currentPage = 1;
 let allProducts = [];
+const ITEMS_PER_PAGE = 12;
 let filteredProducts = [];
+
+/**
+ * Lista de palavras comuns para ignorar na busca
+ */
+const IGNORE_WORDS = ['de', 'da', 'do', 'das', 'dos', 'para', 'com', 'sem', 'em', 'no', 'na', 'nos', 'nas'];
 
 /**
  * Botão Flutuante do WhatsApp
@@ -72,7 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeEventListeners() {
     // Event listener para busca
     const searchBox = document.getElementById('searchBox');
+    const clearButton = document.getElementById('clearSearch');
+
     searchBox.addEventListener('input', handleSearch);
+
+    // Event listener para o botão de limpar
+    clearButton.addEventListener('click', () => {
+        searchBox.value = '';
+        filteredProducts = [...allProducts];
+        currentPage = 1;
+        renderProducts();
+        renderPagination();
+    });
 
     // Event listener para modal
     const modal = document.getElementById('imageModal');
@@ -275,11 +291,36 @@ function renderPagination() {
  */
 function handleSearch(e) {
     const searchTerm = e.target.value.toLowerCase().trim();
+
+    // Se a busca estiver vazia, mostra todos os produtos
+    if (!searchTerm) {
+        filteredProducts = [...allProducts];
+        currentPage = 1;
+        renderProducts();
+        renderPagination();
+        return;
+    }
+
+    // Divide os termos de busca em palavras individuais e remove palavras ignoradas
+    const searchWords = searchTerm
+        .split(/\s+/)
+        .filter(word => !IGNORE_WORDS.includes(word));
+
     filteredProducts = allProducts.filter(([ref, name, price]) => {
-        const refStr = ref ? ref.toString().toLowerCase() : '';
-        const nameStr = name ? name.toLowerCase() : '';
-        return nameStr.includes(searchTerm) || refStr.includes(searchTerm);
+        if (!name) return false;
+
+        // Divide o nome do produto em palavras e remove palavras ignoradas
+        const productWords = name
+            .toLowerCase()
+            .split(/\s+/)
+            .filter(word => !IGNORE_WORDS.includes(word));
+
+        // Verifica se todas as palavras da busca estão presentes no nome do produto
+        return searchWords.every(searchWord =>
+            productWords.some(productWord => productWord.includes(searchWord))
+        );
     });
+
     currentPage = 1;
     renderProducts();
     renderPagination();
