@@ -1,0 +1,248 @@
+/* Filtros e Busca */
+.search-filter-container {
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+    padding: 1rem;
+    background: var(--color-white);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+.search-box {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--color-primary);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(255, 131, 70, 0.2);
+}
+
+.filter-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-button:hover {
+    background: var(--color-secondary);
+}
+
+.filter-button.active {
+    background: var(--color-secondary);
+}
+
+/* Modal de Visualização */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    margin: auto;
+    background: var(--color-white);
+    border-radius: 15px;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-image {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--color-white);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: var(--color-secondary);
+    color: var(--color-white);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--color-primary);
+    border-top: 5px solid var(--color-secondary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Paginação */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+
+.pagination-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-button:hover {
+    background: var(--color-secondary);
+}
+
+.pagination-button.active {
+    background: var(--color-secondary);
+}
+
+/* Melhorias no WhatsApp Button */
+.whatsapp-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-logo {
+    width: 65px;
+    height: 65px;
+    background-color: #25d366;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-logo::before {
+    content: "\f232";
+    font-family: "Font Awesome 5 Brands";
+    font-size: 30px;
+    color: #fff;
+}
+
+.whatsapp-logo:hover {
+    background-color: #128C7E;
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .search-filter-container {
+        padding: 0.8rem;
+    }
+
+    .filter-container {
+        gap: 0.5rem;
+    }
+
+    .filter-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .modal-content {
+        max-width: 95%;
+    }
+
+    .whatsapp-logo {
+        width: 55px;
+        height: 55px;
+    }
+
+    .whatsapp-logo::before {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-box {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .filter-button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .whatsapp-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .whatsapp-logo::before {
+        font-size: 22px;
+    }
+}
