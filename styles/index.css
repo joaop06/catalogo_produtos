@@ -177,49 +177,37 @@ footer {
     margin-top: 3rem;
 }
 
-/* Estilos do botão do WhatsApp */
-.whatsapp-button {
+/* Botão flutuante do Whatsapp */
+#whatsapp-button {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: none;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
     z-index: 1000;
-    opacity: 0;
+    display: none;
+    animation: none;
+    transition: transform 0.3s ease;
 }
 
-.whatsapp-logo {
-    width: 65px;
-    height: 65px;
-    background-color: #25d366;
+#whatsapp-button img {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.whatsapp-logo::before {
-    content: "\f232";
-    font-family: "Font Awesome 5 Brands";
-    font-size: 30px;
-    color: #fff;
-}
+/* Animação de "pulo" */
+@keyframes jump {
 
-.whatsapp-logo:hover {
-    background-color: #128C7E;
-    transform: scale(1.1);
-}
+    0%,
+    100% {
+        transform: translateY(0);
+    }
 
-/* Animação de aparecimento inicial */
-.whatsapp-button.fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
-}
-
-/* Animação de pulo */
-.whatsapp-button.jump {
-    animation: jump 0.5s ease-in-out;
+    50% {
+        transform: translateY(-15px);
+    }
 }
 
 @keyframes fadeIn {
@@ -282,11 +270,6 @@ footer {
 
     .product-price {
         font-size: 1.1rem;
-    }
-
-    .whatsapp-logo {
-        width: 55px;
-        height: 55px;
     }
 
     .logo {

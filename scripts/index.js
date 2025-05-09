@@ -17,21 +17,26 @@ let filteredProducts = [];
 /**
  * Botão Flutuante do WhatsApp
  */
-document.addEventListener("DOMContentLoaded", function () {
-    var whatsappButton = document.getElementById("whatsapp-button");
+document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('whatsapp-button');
 
-    setTimeout(function () {
-        whatsappButton.style.display = "block";
-        whatsappButton.classList.add("fade-in");
+    // Mostra o botão após 3 segundos
+    setTimeout(() => {
+        button.style.display = 'block';
 
-        setInterval(function () {
-            whatsappButton.classList.toggle("jump");
-        }, 2000);
+        // A cada 2 segundos, aplica a animação
+        setInterval(() => {
+            button.style.animation = 'jump 0.8s ease';
+
+            // Remove a animação após a execução para permitir reinício
+            setTimeout(() => {
+                button.style.animation = 'none';
+            }, 500);
+        }, 5000);
+
     }, 3000);
-
-    // Inicializa os event listeners
-    initializeEventListeners();
 });
+
 
 /**
  * Inicializa todos os event listeners
@@ -89,13 +94,7 @@ async function fetchCompanyConfig() {
                 case 'Whatsapp':
                     if (!!content) {
                         const whatsappButton = document.getElementById('whatsapp-button');
-
-                        const whatsappNumber = document.getElementById('whatsapp-number');
-                        whatsappNumber.href = `https://wa.me/55${content}`; // Número do WhatsApp
-
-                        whatsappNumber.classList.remove('disabled');
-                        whatsappButton.classList.remove('disabled');
-                        whatsappButton.classList.add('whatsapp-button');
+                        whatsappButton.href = `https://wa.me/55${content}`; // Número do WhatsApp
                     }
                     break;
 
@@ -153,14 +152,28 @@ function renderProducts() {
     const productsToShow = filteredProducts.slice(startIndex, endIndex);
 
     productsToShow.forEach(([ref, name, price, image_link]) => {
+        if (!name || !image_link) return;
+
+        /**
+         * Dados do Produto
+         */
+        const reference = ref?.toString()?.trim()?.padStart(4, 0);
+        const referenceDiv = !!ref ? `REF.${reference}` : '';
+
+        const productPriceDiv = !!ENABLE_PRICE_PRODUCTS ? !!price ? price : 'Em breve' : '';
+
+
+        /**
+         * Montagem do Card do Produto
+         */
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
             <img src="${image_link}" alt="${name}" loading="lazy" />
             <div class="product-info">
                 <div class="product-name">${name}</div>
-                <div class="product-ref">REF.${ref?.toString()?.trim()?.padStart(4, 0)}</div>
-                <div class="product-price">${!!ENABLE_PRICE_PRODUCTS ? !!price ? price : 'Em breve' : ''}</div>
+                <div class="product-ref">${referenceDiv}</div>
+                <div class="product-price">${productPriceDiv}</div>
             </div>
         `;
 
