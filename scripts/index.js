@@ -243,47 +243,68 @@ function renderPagination() {
 
     if (totalPages <= 1) return;
 
+    const createButton = (text, page, disabled = false, isActive = false) => {
+        const btn = document.createElement('button');
+        btn.textContent = text;
+        btn.className = 'pagination-button';
+        if (isActive) btn.classList.add('active');
+        if (disabled) {
+            btn.classList.add('disabled');
+        } else {
+            btn.addEventListener('click', () => {
+                currentPage = page;
+                renderProducts();
+                renderPagination();
+                scrollToTop();
+            });
+        }
+        return btn;
+    };
+
     // Botão anterior
-    if (currentPage > 1) {
-        const prevButton = document.createElement('button');
-        prevButton.className = 'pagination-button';
-        prevButton.innerHTML = '&laquo;';
-        prevButton.addEventListener('click', () => {
-            currentPage--;
-            renderProducts();
-            renderPagination();
-            scrollToTop();
-        });
-        pagination.appendChild(prevButton);
+    pagination.appendChild(createButton('«', currentPage - 1, currentPage === 1));
+
+    const pages = [];
+
+    if (totalPages <= 5) {
+        for (let i = 1; i <= totalPages; i++) {
+            pages.push(i);
+        }
+    } else {
+        pages.push(1);
+
+        if (currentPage > 3) {
+            pages.push('...');
+        }
+
+        const middlePages = [
+            currentPage - 1,
+            currentPage,
+            currentPage + 1
+        ].filter(p => p > 1 && p < totalPages);
+
+        pages.push(...middlePages);
+
+        if (currentPage < totalPages - 2) {
+            pages.push('...');
+        }
+
+        pages.push(totalPages);
     }
 
-    // Números das páginas
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
-        pageButton.textContent = i;
-        pageButton.addEventListener('click', () => {
-            currentPage = i;
-            renderProducts();
-            renderPagination();
-            scrollToTop();
-        });
-        pagination.appendChild(pageButton);
-    }
+    pages.forEach(p => {
+        if (p === '...') {
+            const span = document.createElement('span');
+            span.textContent = '...';
+            span.className = 'pagination-ellipsis';
+            pagination.appendChild(span);
+        } else {
+            pagination.appendChild(createButton(p, p, false, p === currentPage));
+        }
+    });
 
     // Botão próximo
-    if (currentPage < totalPages) {
-        const nextButton = document.createElement('button');
-        nextButton.className = 'pagination-button';
-        nextButton.innerHTML = '&raquo;';
-        nextButton.addEventListener('click', () => {
-            currentPage++;
-            renderProducts();
-            renderPagination();
-            scrollToTop();
-        });
-        pagination.appendChild(nextButton);
-    }
+    pagination.appendChild(createButton('»', currentPage + 1, currentPage === totalPages));
 }
 
 /**
