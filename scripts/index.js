@@ -33,10 +33,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.style.animation = 'none';
             }, 500);
         }, 5000);
-
     }, 3000);
-});
 
+    // Inicializa o modal
+    const modal = document.getElementById('imageModal');
+    const modalClose = document.querySelector('.modal-close');
+    const modalImage = document.getElementById('modalImage');
+
+    // Fecha o modal ao clicar no X
+    modalClose.addEventListener('click', () => {
+        modal.classList.remove('active');
+        modalImage.src = '';
+    });
+
+    // Fecha o modal ao clicar fora da imagem
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            modalImage.src = '';
+        }
+    });
+
+    // Fecha o modal ao pressionar ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            modalImage.src = '';
+        }
+    });
+});
 
 /**
  * Inicializa todos os event listeners
