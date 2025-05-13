@@ -25,24 +25,35 @@
     </header>
 
     <main>
-        <div class="catalog-title">Área Administrativa - Upload de Imagem</div>
+        <div class="title">Área Administrativa</div>
+
+        <div id="popup-container" style="height: 0; transition: height 0.3s ease;">
+            <div id="popup" class="popup-before-copy" style="display: none;">
+                <p id="popupText"></p>
+                <button id="copyButton">Copiar URL da imagem</button>
+            </div>
+        </div>
+
 
         <div class="admin-divider">
             <div class="admin-upload-area">
+                <h3>Upload de Imagem</h3>
                 <input type="file" id="fileInput" accept="image/*" class="form-input" />
-                <br><br>
+                <br>
                 <input type="text" id="customName" placeholder="Nome da imagem (sem extensão)" class="form-input" />
                 <br><br>
                 <button id="uploadButton" class="form-button">Enviar Imagem</button>
                 <p id="message" style="color: red;"></p>
             </div>
-        </div>
-    </main>
 
-    <div id="popup" class="popup-before-copy">
-        <p id="popupText"></p>
-        <button id="copyButton">Copiar Link</button>
-    </div>
+            <div class="admin-config-area">
+                <h3>Pré-visualização</h3>
+                <img id="imagePreview" src="" alt="Preview da imagem"
+                    style="display:none; max-width: 100%; height: auto; border: 3px solid var(--color-primary); border-radius: 10px;" />
+            </div>
+        </div>
+
+    </main>
 
     <script src="./config.js"></script>
     <script src="./scripts/admin.js"></script>

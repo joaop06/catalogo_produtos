@@ -19,6 +19,28 @@ window.onload = function () {
     }
 };
 
+/**
+ * Preview da imagem selecionada
+ */
+document.getElementById('fileInput').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = '';
+        preview.style.display = 'none';
+    }
+});
+
+/**
+ * Lógica de Upload de Imagem
+ */
 document.getElementById('uploadButton').addEventListener('click', async () => {
     const fileInput = document.getElementById('fileInput');
     const customNameInput = document.getElementById('customName');
@@ -61,9 +83,11 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
         const popup = document.getElementById('popup');
         const popupText = document.getElementById('popupText');
         const copyButton = document.getElementById('copyButton');
+        const popupContainer = document.getElementById('popup-container');
 
-        popupText.textContent = `URL da imagem: ${data.secure_url}`;
         popup.style.display = 'block';
+        popupContainer.style.height = 'auto'; // ativa o espaço reservado
+        popupText.textContent = data.secure_url;
 
         copyButton.onclick = () => {
             navigator.clipboard.writeText(data.secure_url).then(() => {
@@ -71,7 +95,8 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
                 copyButton.classList.add('copied');
                 setTimeout(() => {
                     popup.style.display = 'none';
-                    copyButton.innerHTML = 'Copiar Link';
+                    popupContainer.style.height = '0'; // esconde novamente se desejar
+                    copyButton.innerHTML = 'Copiar URL da imagem';
                     copyButton.classList.remove('copied');
                 }, 1500);
             });
