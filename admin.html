@@ -27,14 +27,6 @@
     <main>
         <div class="title">Área Administrativa</div>
 
-        <div id="popup-container" style="height: 0; transition: height 0.3s ease;">
-            <div id="popup" class="popup-before-copy" style="display: none;">
-                <p id="popupText"></p>
-                <button id="copyButton">Copiar URL da imagem</button>
-            </div>
-        </div>
-
-
         <div class="admin-divider">
             <div class="admin-upload-area">
                 <h3>Upload de Imagem</h3>
@@ -44,6 +36,13 @@
                 <br><br>
                 <button id="uploadButton" class="form-button">Enviar Imagem</button>
                 <p id="message" style="color: red;"></p>
+
+                <div id="popup-container" style="height: 0; transition: height 0.3s ease;">
+                    <div id="popup" class="popup-before-copy" style="display: none;">
+                        <p id="popupText"></p>
+                        <button id="copyButton">Copiar URL da imagem</button>
+                    </div>
+                </div>
             </div>
 
             <div class="admin-config-area">
